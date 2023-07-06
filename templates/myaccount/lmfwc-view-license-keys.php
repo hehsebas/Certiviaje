@@ -106,9 +106,7 @@ defined('ABSPATH') || exit;
                             </form>
                         <?php endif; ?>
 
-                        <form action="..\giftcardform.php" method="post">
-                            <button class="button" type="submit" name="send" id="btnOpenMod" data-license="<?php echo $license->getDecryptedLicenseKey();?>"> <?php _e('Send', 'license-manager-for-woocommerce');?></button>
-                        </form>
+                            <button class="button" name="send" id="btnOpenMod" onclick="openModal(event)" data-license="<?php echo $license->getDecryptedLicenseKey();?>"> <?php _e('Send', 'license-manager-for-woocommerce');?></button>
                         <a href="<?php echo esc_url($order->get_view_order_url()); ?>" class="button view"><?php _e('Order', 'license-manager-for-woocommerce');?></a>
                     </div>
                 </td>
@@ -119,12 +117,6 @@ defined('ABSPATH') || exit;
     </table>
 <?php endforeach; ?>
 
-
-
-<!-- Modal -->
-<button type="button" class="btn btn-primary" id="btnOpenMod">
-    Abrir Modal
-</button>
 
 <div class="modal" id="myModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -211,13 +203,20 @@ defined('ABSPATH') || exit;
         }
         return url;
     }
-    function enviarCorreoElectronico(destinatario, from, to, message, url, urlToPost) {
+    function openModal(event){
+        var modal = document.getElementById('myModal');
+        modal.style.display = 'block';
+        let licencia = event.target.getAttribute('data-license');
+        window.licencia = licencia;
+    }
+    function enviarCorreoElectronico(destinatario, from, to, message, url, urlToPost, licencia) {
         const data = {
             destinatario,
             from,
             to,
             message,
-            url
+            url,
+            licencia
         };
         fetch(urlToPost, {
             method: 'POST',
@@ -234,13 +233,13 @@ defined('ABSPATH') || exit;
             console.error(error); // Manejar error de la solicitud
         });
     }
-
+    var modal = document.getElementById('myModal');
     var btnOpenMod = document.getElementById('btnOpenMod');
     var btnCloseMod = document.getElementById('btnCloseMod');
-    var modal = document.getElementById('myModal');
+    
 
     btnOpenMod.addEventListener('click', function() {
-        modal.style.display = 'block';
+
     });
 
     btnCloseMod.addEventListener('click', function() {
@@ -258,7 +257,7 @@ defined('ABSPATH') || exit;
         let url = "https://as2.ftcdn.net/v2/jpg/02/67/11/55/1000_F_267115523_nhJWtLVlhtYtqGkfVOIzhOCAjQRrejVI.jpg";
         let message = document.getElementById('InputMessage').value;
         let urlToPost = changeFormAction();
-        enviarCorreoElectronico(destinatario, from, to, message, url, urlToPost);
+        enviarCorreoElectronico(destinatario, from, to, message, url, urlToPost,window.licencia);
     });
 
 </script>
