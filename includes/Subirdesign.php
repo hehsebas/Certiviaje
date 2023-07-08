@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $resultado = subirImagen($image_data);
     } else {
-        echo "Error: No se ha seleccionado ning¨²n archivo o ha ocurrido un error en la carga.";
+        echo "Error: No se ha seleccionado ningï¿½ï¿½n archivo o ha ocurrido un error en la carga.";
     }
 }
 
